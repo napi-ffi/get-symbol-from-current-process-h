@@ -1,27 +1,47 @@
 #ifndef _GET_SYMBOL_FROM_CURRENT_PROCESS_H
 #define _GET_SYMBOL_FROM_CURRENT_PROCESS_H
 
-#include <assert.h>
+#include <stddef.h>
+
 #ifdef _WIN32
-#include <windows.h>
+  #include <windows.h>
 #else
-#include <dlfcn.h>
+  #include <dlfcn.h>
 #endif
 
-inline
-void* get_symbol_from_current_process(const char* name) {
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+static inline void* get_symbol_from_current_process(const char* name) {
+  if (name == NULL) {
+    return NULL;
+  }
+
 #ifdef _WIN32
   HMODULE handle = GetModuleHandle(NULL);
-  assert(handle != NULL);
-  return (void*) GetProcAddress(handle, name);
+  if (handle == NULL) {
+    return NULL;
+  }
+  return (void*)GetProcAddress(handle, name);
 #else
   void* handle = dlopen(NULL, RTLD_LAZY);
-  assert(handle != NULL);
+  if (handle == NULL) {
+    return NULL;
+  }
+
   void* sym = dlsym(handle, name);
   dlclose(handle);
-  dlerror();  // Clear any possible errors.
+
+  /* Clear any possible errors from dlsym */
+  dlerror();
+
   return sym;
 #endif
 }
 
+#ifdef __cplusplus
+}
 #endif
+
+#endif /* _GET_SYMBOL_FROM_CURRENT_PROCESS_H */

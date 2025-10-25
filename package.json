@@ -1,25 +1,43 @@
 {
   "author": "Anna Henningsen <anna@addaleax.net>",
-  "name": "get-symbol-from-current-process-h",
+  "name": "@napi-ffi/get-symbol-from-current-process-h",
   "license": "MIT",
+  "maintainers": [
+    "Gilson Urbano <hello@gilsonurbano.com>"
+  ],
   "description": "C function to get a symbol from the current process",
   "keywords": [
     "c",
     "symbol",
     "dlsym",
     "xplat",
-    "napi"
+    "napi",
+    "ffi"
   ],
-  "version": "1.0.2",
+  "version": "1.0.3",
   "repository": {
     "type": "git",
-    "url": "git://github.com/node-ffi-napi/get-symbol-from-current-process-h.git"
+    "url": "git+https://github.com/napi-ffi/get-symbol-from-current-process-h.git"
   },
+  "bugs": {
+    "url": "https://github.com/napi-ffi/get-symbol-from-current-process-h/issues"
+  },
+  "homepage": "https://github.com/napi-ffi/get-symbol-from-current-process-h#readme",
   "main": "get-paths.js",
+  "files": [
+    "get-paths.js",
+    "include/"
+  ],
   "scripts": {
-    "test": "reverse-test get-uv-event-loop-napi-h"
+    "test": "node-gyp rebuild --directory . && node -e \"process.exit(require('child_process').spawnSync(process.platform === 'win32' ? 'build\\\\Release\\\\test_symbol.exe' : './build/Release/test_symbol', [], {stdio: 'inherit'}).status || 0)\"",
+    "build": "node-gyp rebuild",
+    "clean": "node-gyp clean",
+    "install": "echo 'No build step required for installation'"
   },
   "devDependencies": {
-    "reverse-test": "^1.1.0"
+    "node-gyp": "^11.5.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
