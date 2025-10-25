@@ -1,41 +1,62 @@
-get-symbol-from-current-process-h
-=================================
-### C function to get a symbol from the current process
+# @napi-ffi/get-symbol-from-current-process-h
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/node-ffi-napi/get-symbol-from-current-process-h.svg)](https://greenkeeper.io/)
+[![CI](https://github.com/napi-ffi/get-symbol-from-current-process-h/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/napi-ffi/get-symbol-from-current-process-h/actions/workflows/ci.yml)
+[![npm version](https://img.shields.io/npm/v/@napi-ffi/get-symbol-from-current-process-h.svg)](https://www.npmjs.com/package/@napi-ffi/get-symbol-from-current-process-h)
+[![npm downloads](https://img.shields.io/npm/dm/@napi-ffi/get-symbol-from-current-process-h.svg)](https://www.npmjs.com/package/@napi-ffi/get-symbol-from-current-process-h)
+[![License: ISC](https://img.shields.io/badge/License-ISC-blue.svg)](./LICENSE)
 
-[![NPM Version](https://img.shields.io/npm/v/get-symbol-from-current-process-h.svg?style=flat)](https://npmjs.org/package/get-symbol-from-current-process-h)
-[![NPM Downloads](https://img.shields.io/npm/dm/get-symbol-from-current-process-h.svg?style=flat)](https://npmjs.org/package/get-symbol-from-current-process-h)
-[![Build Status](https://travis-ci.org/node-ffi-napi/get-symbol-from-current-process-h.svg?style=flat&branch=master)](https://travis-ci.org/node-ffi-napi/get-symbol-from-current-process-h?branch=master)
-[![Coverage Status](https://coveralls.io/repos/node-ffi-napi/get-symbol-from-current-process-h/badge.svg?branch=master)](https://coveralls.io/r/node-ffi-napi/get-symbol-from-current-process-h?branch=master)
-[![Dependency Status](https://david-dm.org/node-ffi-napi/get-symbol-from-current-process-h.svg?style=flat)](https://david-dm.org/node-ffi-napi/get-symbol-from-current-process-h)
+> Cross-platform C function to get a symbol from the current process
 
-The information presented below is specific to usage for building with `npm` and `gyp`.
+This package provides a header-only C library for retrieving symbols from the current process in a cross-platform manner. It works on Unix-like systems (using `dlsym`) and Windows (using `GetProcAddress`).
 
-Installation
-------------
+Originally authored by [Anna Henningsen](https://github.com/addaleax) as part of the [node-ffi-napi](https://github.com/node-ffi-napi) project. This is a maintained fork under the [@napi-ffi](https://github.com/napi-ffi) organization.
 
-Install with `npm`:
+## Installation
 
-``` bash
-$ npm install get-symbol-from-current-process-h
+Install with npm:
+
+```bash
+npm install @napi-ffi/get-symbol-from-current-process-h
 ```
 
-Usage
------
+## Usage
 
-In your `binding.gyp`:
+### In your `binding.gyp`:
 
 ```python
-    'include_dirs': ["<!@(node -p \"require('get-symbol-from-current-process-h').include\")"],
+'include_dirs': [
+  "<!@(node -p \"require('@napi-ffi/get-symbol-from-current-process-h').include\")"
+]
 ```
 
-(Just have `"<!@(node -p \"require('get-symbol-from-current-process-h').include\")"` somewhere in that list, ok?)
-
-In your C code:
+### In your C/C++ code:
 
 ```c
 #include <get-symbol-from-current-process.h>
 
-void* sym = get_symbol_from_current_process("foobar");
+void* sym = get_symbol_from_current_process("my_function");
+if (sym != NULL) {
+  // Use the symbol
+}
 ```
+
+## API
+
+### `void* get_symbol_from_current_process(const char* name)`
+
+Retrieves a symbol from the current process by name.
+
+**Parameters:**
+- `name`: The name of the symbol to retrieve (must not be NULL)
+
+**Returns:**
+- Pointer to the symbol if found
+- `NULL` if the symbol is not found or an error occurs
+
+
+
+This package requires Node.js >= 20.0.0
+
+## License
+
+ISC License - See [LICENSE](LICENSE) file for details
